@@ -8,7 +8,7 @@ if(!$cart){ header('Location: cart.php'); exit; }
 
 $ids = array_keys($cart);
 $in  = implode(',', array_fill(0,count($ids),'?'));
-$stmt= $pdo->prepare("SELECT id,price FROM products WHERE id IN ($in)");
+$stmt= $pdo->prepare("SELECT id,price FROM books WHERE id IN ($in)");
 $stmt->execute($ids);
 $prices = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 
@@ -22,7 +22,7 @@ try{
     $orderId = $pdo->lastInsertId();
 
     $itemStmt = $pdo->prepare(
-        "INSERT INTO order_items (order_id,product_id,quantity,price) VALUES (?,?,?,?)"
+        "INSERT INTO order_items (order_id,book_id,quantity,price) VALUES (?,?,?,?)"
     );
     foreach($cart as $id=>$q){
         $itemStmt->execute([$orderId,$id,$q,$prices[$id]['price']]);

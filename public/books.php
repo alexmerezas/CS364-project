@@ -4,19 +4,19 @@ $q   = $_GET['q']   ?? '';
 $cat = $_GET['cat'] ?? '';
 
 if($q){
-    $sql = "SELECT id,title,price,image FROM products
+    $sql = "SELECT id,title,price,image FROM books
             WHERE title LIKE ? OR description LIKE ?";
     $stmt= $pdo->prepare($sql);
     $stmt->execute(["%$q%","%$q%"]);
 } else {
-    $sql = $cat ? "SELECT id,title,price,image FROM products WHERE category_id = ?" :
-                  "SELECT id,title,price,image FROM products";
+    $sql = $cat ? "SELECT id,title,price,image FROM books WHERE genre_id = ?" :
+                  "SELECT id,title,price,image FROM books";
     $stmt= $pdo->prepare($sql);
     $stmt->execute($cat ? [$cat] : []);
 }
 $rows = $stmt->fetchAll();
 
-$title='Products';
+$title='Books';
 include '../includes/header.php';
 ?>
 <form class="mb-4" method="get">
@@ -35,7 +35,7 @@ include '../includes/header.php';
         <h6><?= htmlspecialchars($p['title']) ?></h6>
         <p>&euro;<?= $p['price'] ?></p>
         <a class="btn btn-sm btn-outline-primary"
-           href="product_details.php?id=<?= $p['id'] ?>">View</a>
+           href="book_details.php?id=<?= $p['id'] ?>">View</a>
       </div>
     </div>
   </div>

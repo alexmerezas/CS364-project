@@ -5,12 +5,12 @@ require_once '../config/db.php';
 $cart = $_SESSION['cart'] ?? [];
 $ids = array_keys($cart);
 
-$products = [];
+$books = [];
 if($ids){
     $in = implode(',', array_fill(0,count($ids),'?'));
-    $stmt = $pdo->prepare("SELECT id,title,price,image FROM products WHERE id IN ($in)");
+    $stmt = $pdo->prepare("SELECT id,title,price,image FROM books WHERE id IN ($in)");
     $stmt->execute($ids);
-    $products = $stmt->fetchAll(PDO::FETCH_UNIQUE);
+    $books = $stmt->fetchAll(PDO::FETCH_UNIQUE);
 }
 
 $total = 0;
@@ -24,7 +24,7 @@ include '../includes/header.php';
 <table class="table">
 <tr><th>Book</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>
 <?php foreach($cart as $id=>$qty):
-      $p = $products[$id];
+      $p = $books[$id];
       $sub = $qty*$p['price'];
       $total += $sub; ?>
 <tr>

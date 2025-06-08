@@ -4,12 +4,12 @@ require_once '../config/db.php';
 include '../includes/header.php';
 
 $recent = $pdo->query(
-  "SELECT id,title,price,image FROM products ORDER BY created_at DESC LIMIT 6"
+  "SELECT id,title,price,image FROM books ORDER BY created_at DESC LIMIT 6"
 )->fetchAll();
 
-$firstCat = $pdo->query("SELECT id FROM categories LIMIT 1")->fetchColumn();
+$firstCat = $pdo->query("SELECT id FROM genres LIMIT 1")->fetchColumn();
 $catStmt  = $pdo->prepare(
-  "SELECT id,title,price,image FROM products WHERE category_id = ? LIMIT 6"
+  "SELECT id,title,price,image FROM books WHERE genre_id = ? LIMIT 6"
 );
 $catStmt->execute([$firstCat]);
 $featured = $catStmt->fetchAll();
@@ -18,7 +18,7 @@ $featured = $catStmt->fetchAll();
 <div class="p-5 mb-4 bg-light rounded-3">
   <h1 class="display-5 fw-bold">Book Shop Demo</h1>
   <p class="lead">Semester project for CS364.</p>
-  <a href="products.php" class="btn btn-primary btn-lg">Browse All</a>
+  <a href="books.php" class="btn btn-primary btn-lg">Browse All</a>
 </div>
 
 <h2 class="mb-3">Recent Books</h2>
@@ -30,14 +30,14 @@ $featured = $catStmt->fetchAll();
         <div class="card-body text-center">
           <h6><?= htmlspecialchars($p['title']) ?></h6>
           <p>&euro;<?= $p['price'] ?></p>
-          <a href="product_details.php?id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
+          <a href="book_details.php?id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
         </div>
       </div>
     </div>
   <?php endforeach; ?>
 </div>
 
-<h2 class="mb-3">Category Highlights</h2>
+<h2 class="mb-3">Genre Highlights</h2>
 <div class="row">
   <?php foreach($featured as $p): ?>
     <div class="col-6 col-md-4 col-lg-2 mb-4">
@@ -46,7 +46,7 @@ $featured = $catStmt->fetchAll();
         <div class="card-body text-center">
           <h6><?= htmlspecialchars($p['title']) ?></h6>
           <p>&euro;<?= $p['price'] ?></p>
-          <a href="product_details.php?id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
+          <a href="book_details.php?id=<?= $p['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
         </div>
       </div>
     </div>
