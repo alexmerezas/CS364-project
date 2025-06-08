@@ -1,6 +1,5 @@
 <?php
-require_once '../../includes/auth.php';
-guard(true);
+include '../../includes/admin_guard.php';
 
 require_once '../../config/db.php';
 $userCnt = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
