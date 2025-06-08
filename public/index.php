@@ -25,14 +25,14 @@ $featured = $catStmt->fetchAll();
 
 <div class="p-5 mb-4 bg-light rounded-3">
   <h1 class="display-5 fw-bold">Promitheas Press</h1>
-  <p class="lead">Books from Cypriot and Greek culture</p>
-  <a href="books.php" class="btn btn-primary btn-lg">Browse All Books</a>
+  <p class="lead">Progressive Cypriot and Greek literature in English</p>
+  <a href="books.php" class="btn btn-primary btn-lg">Browse By Category</a>
 </div>
 
 <h2 class="mb-3">Recently Added Books</h2>
 <div class="row">
   <?php foreach ($recent as $p): ?>
-    <div class="col-6 col-md-4 col-lg-2 mb-4">
+    <div class="col-6 col-md-4 mb-4">
       <div class="card h-100">
         <img src="/images/<?= htmlspecialchars($p['image']) ?>" class="card-img-top" alt="">
         <div class="card-body text-center">
@@ -53,7 +53,7 @@ $featured = $catStmt->fetchAll();
 <h2 class="mb-3">Genre Highlights</h2>
 <div class="row">
   <?php foreach ($featured as $p): ?>
-    <div class="col-6 col-md-4 col-lg-2 mb-4">
+    <div class="col-6 col-md-4 mb-4">
       <div class="card h-100">
         <img src="/images/<?= htmlspecialchars($p['image']) ?>" class="card-img-top" alt="">
         <div class="card-body text-center">
