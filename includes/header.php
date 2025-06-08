@@ -1,6 +1,10 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
-function isAdmin() { return ($_SESSION['role'] ?? '') === 'admin'; }
+if (!function_exists('isAdmin')) {
+    function isAdmin() {
+        return ($_SESSION['role'] ?? '') === 'admin';
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">

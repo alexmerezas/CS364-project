@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__.'/../config/db.php';
 
 function login($email,$password){
@@ -8,7 +10,7 @@ function login($email,$password){
     $stmt->execute([$email]);
     $u=$stmt->fetch(PDO::FETCH_ASSOC);
     if($u && password_verify($password,$u['password'])){
-        $_SESSION['uid']=$u['id'];
+        $_SESSION['user_id'] = $u['id'];
         $_SESSION['role']=$u['role'];
         return true;
     }
@@ -17,7 +19,7 @@ function login($email,$password){
 
 function logout(){ session_destroy(); }
 
-function user(){ return $_SESSION['uid'] ?? null; }
+function user(){ return $_SESSION['user_id'] ?? null; }
 
 function isAdmin(){ return ($_SESSION['role'] ?? '')==='admin'; }
 
