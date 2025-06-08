@@ -1,0 +1,12 @@
+*.log
+*.sql
+*.zip
+*.rar
+*.tar.gz
+vendor/
+node_modules/
+.env
+.idea/
+.vscode/
+.DS_Store
+__pycache__/
