@@ -1,7 +1,7 @@
 <?php
-session_start();
 require_once '../includes/auth.php';
 require_once '../config/db.php';
+guard(); 
 
 $cart = $_SESSION['cart'] ?? [];
 if(!$cart){ header('Location: cart.php'); exit; }
@@ -22,7 +22,7 @@ try{
     $orderId = $pdo->lastInsertId();
 
     $itemStmt = $pdo->prepare(
-        "INSERT INTO order_items (order_id,book_id,quantity,price) VALUES (?,?,?,?)"
+        "INSERT INTO order_items (order_id,book_id,qty,price) VALUES (?,?,?,?)"
     );
     foreach($cart as $id=>$q){
         $itemStmt->execute([$orderId,$id,$q,$prices[$id]['price']]);
