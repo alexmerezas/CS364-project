@@ -3,15 +3,28 @@ require_once '../config/db.php';
 $q   = $_GET['q']   ?? '';
 $cat = $_GET['cat'] ?? '';
 
-if($q){
-    $sql = "SELECT id,title,price,image FROM books
-            WHERE title LIKE ? OR description LIKE ?";
-    $stmt= $pdo->prepare($sql);
-    $stmt->execute(["%$q%","%$q%"]);
+if ($q) {
+    $sql = "SELECT b.id, b.title, b.price, b.image, b.author, b.pub_year, g.name AS genre
+            FROM books b
+            JOIN genres g ON b.genre_id = g.id
+            WHERE b.title LIKE ?
+               OR b.description LIKE ?
+               OR b.author LIKE ?
+               OR b.publisher LIKE ?
+               OR b.isbn LIKE ?";
+    $stmt = $pdo->prepare($sql);
+    $like = "%$q%";
+    $stmt->execute([$like, $like, $like, $like, $like]);
 } else {
-    $sql = $cat ? "SELECT id,title,price,image FROM books WHERE genre_id = ?" :
-                  "SELECT id,title,price,image FROM books";
-    $stmt= $pdo->prepare($sql);
+    $sql = $cat
+        ? "SELECT b.id, b.title, b.price, b.image, b.author, b.pub_year, g.name AS genre
+           FROM books b
+           JOIN genres g ON b.genre_id = g.id
+           WHERE b.genre_id = ?"
+        : "SELECT b.id, b.title, b.price, b.image, b.author, b.pub_year, g.name AS genre
+           FROM books b
+           JOIN genres g ON b.genre_id = g.id";
+    $stmt = $pdo->prepare($sql);
     $stmt->execute($cat ? [$cat] : []);
 }
 $rows = $stmt->fetchAll();
@@ -30,10 +43,15 @@ include '../includes/header.php';
 <?php foreach($rows as $p): ?>
   <div class="col-6 col-md-4 col-lg-2 mb-4">
     <div class="card h-100">
-      <img src="<?= $p['image'] ?>" class="card-img-top">
+      <img src="/images/<?= htmlspecialchars($p['image']) ?>" class="card-img-top" alt="">
       <div class="card-body text-center">
-        <h6><?= htmlspecialchars($p['title']) ?></h6>
-        <p>&euro;<?= $p['price'] ?></p>
+        <h6 class="mb-1">
+          <?= htmlspecialchars($p['title']) ?> 
+          (<?= htmlspecialchars($p['pub_year']) ?>)
+        </h6>
+        <p class="text-muted mb-1">by <?= htmlspecialchars($p['author']) ?></p>
+        <p class="text-muted small mb-2">(<?= htmlspecialchars($p['genre']) ?>)</p>
+        <p class="fw-bold mb-2">&euro;<?= number_format($p['price'], 2) ?></p>
         <a class="btn btn-sm btn-outline-primary"
            href="book_details.php?id=<?= $p['id'] ?>">View</a>
       </div>
